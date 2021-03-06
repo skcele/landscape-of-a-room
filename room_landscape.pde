@@ -6,7 +6,7 @@ import org.openkinect.tests.*;
 
 Kinect2 kinect2;
 
-//blobdetection
+// blob detection
 import blobDetection.*;
 import peasy.*;
 PeasyCam cam;
@@ -15,16 +15,14 @@ float levels = 10;                    // number of contours
 float factor = 0.75;                     // scale factor
 float elevation = 70;                 // total height of the 3d model
 
-float colorStart =  40;               // Starting dregee of color range in HSB Mode (0-360)
-//float colorRange =  160;             // color range / can also be negative
-float colorRange =  360;             // color range / can also be negative
+float colorStart =  40;               // Starting degree of color range in HSB Mode (0-360)
+float colorRange =  160;             // color range for screen viewing / can also be negative
+//float colorRange =  360;             // color range for projection
 
 // Array of BlobDetection Instances
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
 
 int [] newDepth;
-//newDepth = new int[217088];
-  
 int backgroundColor;
 int backgroundColorChange;
   
@@ -48,20 +46,20 @@ void setup() {
 void draw() {
   
   //BACKGROUND
-  //earthy
+  
+  //earthy colors
   //background(backgroundColor, 100, 0);
     //background(0);
+    
   //bright
   background(backgroundColor, 250, 50);
-  //background(0);
   
   //Increment the value of backgroundColor by the value of backgroundColorChange
   backgroundColor += backgroundColorChange;
-  //println(backgroundColor);
   //The above line is equivalent to: backgroundColor = backgroundColor + backgroundColorChange;
   
-  //Check if backgroundColor has surpassed our max or min 
-  //255
+  //Check if backgroundColor has surpassed our max or min
+  // use 255 max for screen viewing, and 150 for projection
   if (backgroundColor > 150 || backgroundColor < 55){
     //Multiply the value of backgroundColorChange by -1, reversing the direction of change
     backgroundColorChange *= -1;
@@ -69,6 +67,7 @@ void draw() {
   
   
   //DATA
+  
   //read data in
   int [] rawDepth = kinect2.getRawDepth();
   
@@ -98,8 +97,8 @@ void drawContours(int i) {
       //stroke(255);
       strokeWeight(1.5);
       //original color
-      stroke((i/levels*colorRange)+colorStart,150,200);
-      //stroke((i/levels*colorRange)+colorStart,100,100);
+      stroke((i/levels*colorRange)+colorStart,150,200); //projection
+      //stroke((i/levels*colorRange)+colorStart,100,100); //screen viewing
       for (int m=0;m<b.getEdgeNb();m++) {
         eA = b.getEdgeVertexA(m);
         eB = b.getEdgeVertexB(m);
